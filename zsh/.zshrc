@@ -1,7 +1,7 @@
 # Lines configured by zsh-newuser-install
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/screwage/.zshrc'
+zstyle :compinstall filename '$HOME/.zshrc'
 
 # End of lines added by compinstall
 fpath+=${ZDOTDIR:-~}/.zsh_functions
@@ -313,7 +313,7 @@ alias python=python3
 alias pip=pip3
 
 # For poetry (pipenv alternative)
-export PATH="/Users/dave/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -322,5 +322,3 @@ if type rg &> /dev/null; then
     export FZF_DEFAULT_COMMAND='rg --files'
     export FZF_DEFAULT_OPTS='-m'
 fi
-
-export PATH="/Users/dave/Developer/repos/leet-cli:$PATH"
