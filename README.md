@@ -17,6 +17,8 @@ Included with this repo is a `makefile` that contains two targets: `all` and `de
 - Running `make` will use stow to create or regenerate symlinks
 - Running `make delete` will remove all of those symlinks
 
+GNU stow may not be included by default in some environments (like Mac). Make sure to install with your respective package manager prior to running `make`
+
 ### zsh
 - Install with apt: `apt install zsh`
 - Set to default shell with `chsh -s /use/bin/zsh`
