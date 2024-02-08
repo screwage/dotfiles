@@ -69,6 +69,11 @@ return require('packer').startup(function(use)
     use 'neovim/nvim-lspconfig'
     use 'simrat39/rust-tools.nvim'
 
+    -- Go (https://github.com/ray-x/go.nvim)
+    use 'ray-x/go.nvim'
+    use 'ray-x/guihua.lua' -- recommended if need floating window support
+
+
     -- Debugging
     use 'nvim-lua/plenary.nvim'
     use 'mfussenegger/nvim-dap'

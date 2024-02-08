@@ -1,9 +1,14 @@
-local lsp = require('lsp-zero').preset('recommended')
+local autocmd = vim.api.nvim_create_autocmd
+
+local lsp = require('lsp-zero')
+
+lsp.preset("recommended")
 
 lsp.ensure_installed({
 	'tsserver',
 	'rust_analyzer',
-}) 
+    'gopls'
+})
 
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
@@ -47,7 +52,64 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 
+local util = require("lspconfig/util")
+
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+-- gopls setup: https://cs.opensource.google/go/x/tools/+/refs/tags/gopls/v0.14.2:gopls/doc/vim.md#neovim-config
+require('lspconfig').gopls.setup(
+{
+    cmd = {"gopls"},
+    filetypes = { "go", "gomod", "gowork", "gotmpl" },
+    root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+    settings = {
+        gopls = {
+            completeUnimported = true,
+            usePlaceholders = false,
+            analyses = {
+                unusedparams = true,
+            }
+        }
+    }
+})
+
+autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+    local params = vim.lsp.util.make_range_params()
+    params.context = {only = {"source.organizeImports"}}
+    -- buf_request_sync defaults to a 1000ms timeout. Depending on your
+    -- machine and codebase, you may want longer. Add an additional
+    -- argument after params if you find that you have to write the file
+    -- twice for changes to be saved.
+    -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+    for cid, res in pairs(result or {}) do
+      for _, r in pairs(res.result or {}) do
+        if r.edit then
+          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+          vim.lsp.util.apply_workspace_edit(r.edit, enc)
+        end
+      end
+    end
+    vim.lsp.buf.format({async = false})
+  end
+})
+
+-- local lspconfig = require("lspconfig")
+-- local util = require("lspconfig/util")
+--
+-- local on_attach = require("
+--
+-- lspconfig.gopls.setup {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+--     cmd = {"gopls"},
+--     filetypes = { "go", "gomod", "gowork", "gotmpl" },
+--     root_dir = util.root_pattern("go.work", "go.mod", ".git")
+-- }
+vim.diagnostic.config({
+    virtual_text = true
+})
 
 lsp.setup()

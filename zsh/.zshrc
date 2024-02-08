@@ -322,3 +322,20 @@ if type rg &> /dev/null; then
     export FZF_DEFAULT_COMMAND='rg --files'
     export FZF_DEFAULT_OPTS='-m'
 fi
+
+# Go CLI Setup
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
+
+function smartcd() {
+    directory=$(fd --type d --hidden --exclude .git --exclude node_module --exclude .cache --exclude .npm --exclude .mozilla --exclude .meteor --exclude .nv | fzf)
+
+    if [ -n "$directory" ]; then
+        cd $directory
+    fi
+}
+
+if type fd &> /dev/null && type fzf &> /dev/null; then
+    alias f=smartcd
+    # alias f='cd $(fd --type d --hidden --exclude .git --exclude node_module --exclude .cache --exclude .npm --exclude .mozilla --exclude .meteor --exclude .nv | fzf)'
+fi
