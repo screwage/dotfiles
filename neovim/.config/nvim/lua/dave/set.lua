@@ -27,3 +27,5 @@ vim.opt.clipboard = "unnamed"
 vim.g.mapleader = " "
 
 vim.opt.hlsearch = true
+
+vim.opt.cursorline = true
