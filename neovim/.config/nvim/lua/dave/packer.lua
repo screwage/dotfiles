@@ -65,6 +65,9 @@ return require('packer').startup(function(use)
     -- Personal Finance
     use 'ledger/vim-ledger'
 
+    -- Helm
+    use 'towolf/vim-helm'
+
     -- Rust
     use 'neovim/nvim-lspconfig'
     use 'simrat39/rust-tools.nvim'
