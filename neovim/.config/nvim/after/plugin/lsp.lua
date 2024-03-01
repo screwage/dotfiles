@@ -56,6 +56,18 @@ local util = require("lspconfig/util")
 
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+
+require('lspconfig').helm_ls.setup({
+    settings = {
+        ['helm-ls'] = {
+            yamlls = {
+                path = "yaml-language-server"
+            }
+        }
+    }
+
+})
+
 -- gopls setup: https://cs.opensource.google/go/x/tools/+/refs/tags/gopls/v0.14.2:gopls/doc/vim.md#neovim-config
 require('lspconfig').gopls.setup(
 {
