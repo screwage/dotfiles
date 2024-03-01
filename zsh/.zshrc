@@ -337,5 +337,8 @@ function smartcd() {
 
 if type fd &> /dev/null && type fzf &> /dev/null; then
     alias f=smartcd
-    # alias f='cd $(fd --type d --hidden --exclude .git --exclude node_module --exclude .cache --exclude .npm --exclude .mozilla --exclude .meteor --exclude .nv | fzf)'
+fi
+
+if type lazygit &> /dev/null ; then
+    alias lg=lazygit
 fi
