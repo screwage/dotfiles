@@ -88,7 +88,7 @@ return require('packer').startup(function(use)
     require("nvim-dap-virtual-text").setup()
 
     -- Keep Environment Variables Safe
-    use 'layton/cloak.nvim'
+    use 'laytan/cloak.nvim'
     require('cloak').setup({
       enabled = true,
       cloak_character = '*',
