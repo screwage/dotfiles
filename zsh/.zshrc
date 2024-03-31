@@ -349,3 +349,19 @@ fi
 if type lazygit &> /dev/null ; then
     alias lg=lazygit
 fi
+
+if git root &> /dev/null ; then
+    function cd_to_git_root() {
+        directory=$(git root)
+
+        if [ -n "$directory" ]; then
+            cd $directory
+        fi
+    }
+
+    alias cdg=cd_to_git_root
+fi
+
+# tabtab source for packages
+# uninstall by removing these lines
+[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
