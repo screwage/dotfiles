@@ -142,7 +142,11 @@ if [ "$color_prompt" = yes ]; then
 		;;
 		########## MODIFY BELOW FOR CUSTOM PROMPT ##########
 		custom)
-			PROMPT=$'%B%F{%(#.red.magenta)}%n%(1j. ⚙.)${vcs_info_msg_0_} %B%F{%(#.yellow.cyan)}%(4~.%-1~/…/%2~.%3~)%f%b $ '
+			if [[ ${SSH_TTY} ]] ; then
+				PROMPT=$'%B%F{%(#.red.magenta)}%n %F{%(#.red.green)}{%m}%(1j. ⚙.)${vcs_info_msg_0_} %B%F{%(#.yellow.cyan)}%(4~.%-1~/…/%2~.%3~)%f%b $ '
+			else
+				PROMPT=$'%B%F{%(#.red.magenta)}%n%(1j. ⚙.)${vcs_info_msg_0_} %B%F{%(#.yellow.cyan)}%(4~.%-1~/…/%2~.%3~)%f%b $ '
+			fi
 			zstyle ':vcs_info:*' formats ' %F{green}(%b)%u%c%f'
 		;;
 		kali)
@@ -326,6 +330,9 @@ fi
 # Go CLI Setup
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
+
+# nvim on linux
+PATH="$PATH:/opt/nvim-linux64/bin"
 
 function smartcd() {
     directory=$(fd --type d --hidden --exclude .git --exclude node_module --exclude .cache --exclude .npm --exclude .mozilla --exclude .meteor --exclude .nv | fzf)
