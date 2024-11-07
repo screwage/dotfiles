@@ -304,7 +304,9 @@ new() {
 source <(ng completion script)
 
 # Use neovim instead of vim
-alias vim="nvim"
+# alias vim="nvim"
+alias vim='NVIM_APPNAME="nvim-kickstart" nvim'
+alias nvim-original='nvim'
 
 alias p=pnpm
 
@@ -362,6 +364,12 @@ if git root &> /dev/null ; then
     alias cdg=cd_to_git_root
 fi
 
+# Zoxide setup
+eval "$(zoxide init zsh)"
+
 # tabtab source for packages
 # uninstall by removing these lines
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
