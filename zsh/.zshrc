@@ -103,7 +103,7 @@ function zshaddhistory() {
 
 case "$TERM" in
 	xterm-color|*-256color) color_prompt=yes ;;
-	xterm-kitty|alacritty)  color_prompt=yes ;;
+	xterm-kitty|alacritty|xterm-ghostty)  color_prompt=yes ;;
 esac
 
 # Find if we have color prompt
@@ -305,6 +305,7 @@ source <(ng completion script)
 
 # Use neovim instead of vim
 # alias vim="nvim"
+alias v='NVIM_APPNAME="nvim-kickstart" nvim .'
 alias vim='NVIM_APPNAME="nvim-kickstart" nvim'
 alias nvim-original='nvim'
 
@@ -321,6 +322,9 @@ alias pip=pip3
 # For poetry (pipenv alternative)
 export PATH="$HOME/.local/bin:$PATH"
 
+# Zig Setup
+export PATH="$HOME/Developer/tools/zig-macos-aarch64-0.14.0-dev.3280+bbd13ab96:$PATH"
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Have fzf use ripgrep (rg) instead of grep
@@ -336,6 +340,12 @@ export PATH="$GOPATH/bin:$PATH"
 # nvim on linux
 PATH="$PATH:/opt/nvim-linux64/bin"
 
+# Use kitten outside of kitty terminal
+export PATH="$PATH:/Applications/kitty.app/Contents/MacOS"
+
+# Android dev
+export ANDROID_HOME="/Users/dave/Developer/tools/Android/cmdline-tools"
+
 function smartcd() {
     directory=$(fd --type d --hidden --exclude .git --exclude node_module --exclude .cache --exclude .npm --exclude .mozilla --exclude .meteor --exclude .nv | fzf)
 
@@ -344,8 +354,36 @@ function smartcd() {
     fi
 }
 
+function jqfzf() {
+    local input key
+
+    if [ -p /dev/stdin ]; then
+	    # If input is piped in...
+	    input=$(cat -)
+    else
+	    # If file is provided as an argument...
+	    input=$(cat "$1")
+    fi
+
+    if [ $# -eq 0 ] || ([ -p /dev/stdin ] && [ $# -eq 0 ]) || ([ ! -p /dev/stdin ] && [ $# -eq 1 ]); then
+	    key=$(echo "$input" | jq -r '[.[] | keys[]] | unique | .[]' | fzf --header="Select a JSON Key to search by...")
+    else
+	    key="${@: -1}"
+    fi
+
+    echo "$input" | jq -r ".[] | select(has(\"${key}\")) | .${key} | tostring" | fzf --preview="echo '$input' | jq -r '.[] | select(has(\"${key}\") and (.${key} | tostring | contains(\"{}\")))'"
+}
+
 if type fd &> /dev/null && type fzf &> /dev/null; then
     alias f=smartcd
+fi
+
+alias dumprepo='fd --type f --hidden --exclude .git --exclude package-lock.json --exclude node_modules --exclude go.sum --exec sh -c '\''echo "*=*=*= {} =*=*=*"; cat "{}"'\'''
+
+if type aerospace &> /dev/null && type fzf &> /dev/null; then
+	function af() {
+		aerospace list-windows --all | fzf --bind 'enter:execute(bash -c "aerospace focus --window-id {1}")+abort'
+	}
 fi
 
 if type lazygit &> /dev/null ; then
@@ -363,6 +401,8 @@ if git root &> /dev/null ; then
 
     alias cdg=cd_to_git_root
 fi
+
+alias tn="tmux new -s"
 
 # Zoxide setup
 eval "$(zoxide init zsh)"
