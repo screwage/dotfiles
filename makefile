@@ -16,6 +16,12 @@ stow-zsh:
 stow-sway:
 	stow --verbose --target=$$HOME --restow sway
 
+stow-fuzzel:
+	stow --verbose --target=$$HOME --restow fuzzel
+
+delete-fuzzel:
+	stow --verbose --target=$$HOME --delete fuzzel
+
 delete-sway:
 	stow --verbose --target=$$HOME --delete sway
 
