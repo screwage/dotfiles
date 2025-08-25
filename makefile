@@ -13,6 +13,12 @@ stow-tmux:
 stow-zsh:
 	stow --verbose --target=$$HOME --restow zsh
 
+stow-sway:
+	stow --verbose --target=$$HOME --restow sway
+
+delete-sway:
+	stow --verbose --target=$$HOME --delete sway
+
 delete-nvim:
 	stow --verbose --target=$$HOME --delete neovim
 	
