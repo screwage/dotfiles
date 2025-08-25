@@ -22,6 +22,12 @@ stow-fuzzel:
 stow-ghostty:
 	stow --verbose --target=$$HOME --restow ghostty
 
+stow-gowall:
+	stow --verbose --target=$$HOME --restow gowall
+
+delete-gowall:
+	stow --verbose --target=$$HOME --delete gowall
+
 delete-ghostty:
 	stow --verbose --target=$$HOME --delete ghostty
 
