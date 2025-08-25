@@ -304,16 +304,13 @@ new() {
 source <(ng completion script)
 
 # Use neovim instead of vim
-# alias vim="nvim"
-alias v='NVIM_APPNAME="nvim-kickstart" nvim .'
-alias vim='NVIM_APPNAME="nvim-kickstart" nvim'
-alias nvim-original='nvim'
+alias v='nvim .'
+alias vim='nvim'
 
 alias p=pnpm
 
 export EDITOR=nvim
-# export MANPAGER='nvim +Man!'
-export PAGER=nvimpager
+export MANPAGER='nvim +Man!'
 
 # Python aliases
 alias python=python3
@@ -325,7 +322,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # Zig Setup
 export PATH="$HOME/Developer/tools/zig-macos-aarch64-0.14.0-dev.3280+bbd13ab96:$PATH"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || source <(fzf --zsh)
 
 # Have fzf use ripgrep (rg) instead of grep
 if type rg &> /dev/null; then
@@ -390,6 +387,10 @@ if type lazygit &> /dev/null ; then
     alias lg=lazygit
 fi
 
+if type fastfetch &> /dev/null ; then
+    alias ff=fastfetch
+fi
+
 if git root &> /dev/null ; then
     function cd_to_git_root() {
         directory=$(git root)
@@ -403,6 +404,8 @@ if git root &> /dev/null ; then
 fi
 
 alias tn="tmux new -s"
+# rsync with expected permissions
+alias rsync_to_steel="rsync -avhP --chown=999:1000 --chmod=D2775,F664"
 
 # Zoxide setup
 eval "$(zoxide init zsh)"
@@ -413,3 +416,17 @@ eval "$(zoxide init zsh)"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+
+# fnm
+FNM_PATH="$HOME/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "`fnm env`"
+fi
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/dave/.dart-cli-completion/zsh-config.zsh ]] && . /home/dave/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
