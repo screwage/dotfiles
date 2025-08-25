@@ -19,6 +19,12 @@ stow-sway:
 stow-fuzzel:
 	stow --verbose --target=$$HOME --restow fuzzel
 
+stow-ghostty:
+	stow --verbose --target=$$HOME --restow ghostty
+
+delete-ghostty:
+	stow --verbose --target=$$HOME --delete ghostty
+
 delete-fuzzel:
 	stow --verbose --target=$$HOME --delete fuzzel
 
