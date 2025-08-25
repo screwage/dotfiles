@@ -25,6 +25,12 @@ stow-ghostty:
 stow-gowall:
 	stow --verbose --target=$$HOME --restow gowall
 
+stow-swaylock:
+	stow --verbose --target=$$HOME --restow swaylock
+
+delete-swaylock:
+	stow --verbose --target=$$HOME --delete swaylock
+
 delete-gowall:
 	stow --verbose --target=$$HOME --delete gowall
 
