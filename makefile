@@ -28,6 +28,12 @@ stow-gowall:
 stow-swaylock:
 	stow --verbose --target=$$HOME --restow swaylock
 
+stow-waybar:
+	stow --verbose --target=$$HOME --restow waybar
+
+delete-waybar:
+	stow --verbose --target=$$HOME --delete waybar
+
 delete-swaylock:
 	stow --verbose --target=$$HOME --delete swaylock
 
