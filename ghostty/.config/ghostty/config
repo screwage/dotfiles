@@ -74,3 +74,5 @@ keybind = alt+nine=unbind
 
 copy-on-select = clipboard
 app-notifications = no-clipboard-copy
+
+shell-integration-features = ssh-terminfo,ssh-env
