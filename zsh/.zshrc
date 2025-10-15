@@ -49,9 +49,16 @@ bindkey '^[[H' beginning-of-line                # home
 bindkey '^[[F' end-of-line                      # end
 bindkey '^[[Z' undo                             # shift + tab undo last action
 
+autoload edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line            # edit command line in vim with <ESC> v
+
 # enable completion features
 autoload -Uz compinit
 compinit -d ~/.cache/zcompdump
+
+source ~/.local/share/fzf-tab/fzf-tab.plugin.zsh
+
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' # case insensitive tab completion
 zstyle ':completion:*' completer _extensions _complete _approximate
@@ -239,7 +246,11 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias diff='diff --color=auto'
-alias ip='ip --color=auto'
+# Defined as a function instead of an alias
+# because shell completion was breaking
+ip() {
+    command ip --color=auto "$@"
+}
 
 export LESS_TERMCAP_mb=$'\E[1;31m'   # begin blink
 export LESS_TERMCAP_md=$'\E[1;36m'   # begin bold
@@ -303,22 +314,26 @@ new() {
 # Load Angular CLI autocompletion.
 source <(ng completion script)
 
+# Open files in their default applications
+alias open=xdg-open
+
+# Quickly start up a local http server bc im lazy
+# Binding the interface directly speeds up http.server startup time (no dns lookups)
+alias serve="python -m http.server 8000 --bind 127.0.0.1"
+
 # Use neovim instead of vim
 alias v='nvim .'
 alias vim='nvim'
-
-alias p=pnpm
-
 export EDITOR=nvim
 export MANPAGER='nvim +Man!'
+
+alias p=pnpm
 
 # Python aliases
 alias python=python3
 alias pip=pip3
 
-# For poetry (pipenv alternative)
-export PATH="$HOME/.local/bin:$PATH"
-
+# TODO - Migrate to mac zshrc
 # Zig Setup
 export PATH="$HOME/Developer/tools/zig-macos-aarch64-0.14.0-dev.3280+bbd13ab96:$PATH"
 
@@ -334,23 +349,44 @@ fi
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
 
+# uv tools setup
+export PATH="/home/dave/.local/bin:$PATH"
+
+# TODO - Migrate to work zshrc
 # nvim on linux
 PATH="$PATH:/opt/nvim-linux64/bin"
 
+# TODO - Migrate to mac zshrc
 # Use kitten outside of kitty terminal
 export PATH="$PATH:/Applications/kitty.app/Contents/MacOS"
 
+# TODO - Migrate to mac zshrc
 # Android dev
 export ANDROID_HOME="/Users/dave/Developer/tools/Android/cmdline-tools"
 
-function smartcd() {
-    directory=$(fd --type d --hidden --exclude .git --exclude node_module --exclude .cache --exclude .npm --exclude .mozilla --exclude .meteor --exclude .nv | fzf)
+if type fd &> /dev/null && type fzf &> /dev/null; then
+    function smartcd() {
+        directory=$(fd --type d --hidden --exclude .git --exclude node_module --exclude .cache --exclude .npm --exclude .mozilla --exclude .meteor --exclude .nv | fzf)
 
-    if [ -n "$directory" ]; then
-        cd $directory
-    fi
-}
+        if [ -n "$directory" ]; then
+            cd $directory
+        fi
+    }
 
+    alias f=smartcd
+fi
+
+if type tmuxinator &> /dev/null && type fzf &> /dev/null; then
+    function mux() {
+        project=$(tmuxinator completions start | fzf)
+
+        if [ -n "$project" ]; then
+            tmuxinator start $project
+        fi
+    }
+fi
+
+# TODO - update from work zshrc or get rid of it
 function jqfzf() {
     local input key
 
@@ -371,12 +407,9 @@ function jqfzf() {
     echo "$input" | jq -r ".[] | select(has(\"${key}\")) | .${key} | tostring" | fzf --preview="echo '$input' | jq -r '.[] | select(has(\"${key}\") and (.${key} | tostring | contains(\"{}\")))'"
 }
 
-if type fd &> /dev/null && type fzf &> /dev/null; then
-    alias f=smartcd
-fi
-
 alias dumprepo='fd --type f --hidden --exclude .git --exclude package-lock.json --exclude node_modules --exclude go.sum --exec sh -c '\''echo "*=*=*= {} =*=*=*"; cat "{}"'\'''
 
+# TODO - Migrate to mac zshrc
 if type aerospace &> /dev/null && type fzf &> /dev/null; then
 	function af() {
 		aerospace list-windows --all | fzf --bind 'enter:execute(bash -c "aerospace focus --window-id {1}")+abort'
@@ -403,7 +436,18 @@ if git root &> /dev/null ; then
     alias cdg=cd_to_git_root
 fi
 
+if type tree &> /dev/null ; then
+    alias tf='tree --gitignore --dirsfirst -a -C -I .git | less -R'
+fi
+
 alias tn="tmux new -s"
+
+# Allow weird rsync triple backslashes in tab completions
+export RSYNC_OLD_ARGS=1
+
+# Override default virtualbox vagrant provider
+export VAGRANT_DEFAULT_PROVIDER=libvirt
+
 # rsync with expected permissions
 alias rsync_to_steel="rsync -avhP --chown=999:1000 --chmod=D2775,F664"
 
@@ -425,6 +469,7 @@ if [ -d "$FNM_PATH" ]; then
   eval "`fnm env`"
 fi
 
+# TODO - Consider removing this (and dart dependency)
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
 [[ -f /home/dave/.dart-cli-completion/zsh-config.zsh ]] && . /home/dave/.dart-cli-completion/zsh-config.zsh || true

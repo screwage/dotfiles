@@ -328,6 +328,13 @@ mode "opacity" {
     bindsym Ctrl+Shift+4 exec grim -g "$(slurp)" - | wl-copy && TMP_FILE=$(mktemp) && wl-paste > "$TMP_FILE" && dunstify "Screenshot taken" "It's in your clipboard, dummy." -t 3000 -I "$TMP_FILE" && cp "$TMP_FILE" ~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png 
     # Colorpicker
     bindsym Ctrl+Shift+m exec grim -g "$(slurp -p)" -t ppm - | magick - -format '#%[hex:p{0,0}]' info:- | wl-copy && dunstify "Picked color $(wl-paste)" -t 3000
+
+    # Generate QR Code of copied text
+    # Truncate to first 21 characters of text in subtitle
+    bindsym Ctrl+Shift+p exec TMP_FILE=$(mktemp) && wl-paste | qr > "$TMP_FILE" && dunstify 'QR Generated' "$(wl-paste | sed 's/\(.\{21\}\).*/\1.../')" -t 20000 -I "$TMP_FILE"
+
+    # Send copied text to gotify
+    bindsym $mod+p exec wl-paste | gotify push
     
     # Special keys to adjust volume via PulseAudio
     bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
@@ -358,6 +365,12 @@ for_window [class=wow.exe] {
 }
 
 for_window [app_id="firefox" title="Picture-in-Picture"] floating enable
+
+# This window changes its own title after focus...
+# For some reason opacity works here but not floating (until focus changes)
+for_window [app_id="firefox" title="^Extension: .*"] {
+    floating enable
+}
 
 # WIP
 # # This exec_always script watches for focus changes and kills pavucontrol after a 3-second delay

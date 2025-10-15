@@ -38,8 +38,8 @@
 
     "custom/launcher":{
         "format": " ",
-        "on-click": "wofi --show drun",
-        "on-click-right": "killall wofi",
+        "on-click": "fuzzel",
+        "on-click-right": "killall fuzzel",
         "tooltip": false
     },
 
@@ -129,7 +129,7 @@
 	},
 
 	"custom/control":{
-        "format": "🗙 ",
+        "format": "✕",
         // "on-click": "control",
         // "on-click-right": "killall control",
         // "on-click": "swaymsg bar hidden_state toggle",

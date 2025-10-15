@@ -31,6 +31,12 @@ stow-swaylock:
 stow-waybar:
 	stow --verbose --target=$$HOME --restow waybar
 
+stow-halloy:
+	stow --verbose --target=$$HOME --restow halloy
+
+delete-halloy:
+	stow --verbose --target=$$HOME --delete halloy
+
 delete-waybar:
 	stow --verbose --target=$$HOME --delete waybar
 
