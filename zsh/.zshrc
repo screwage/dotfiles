@@ -37,6 +37,7 @@ export PROMPT_EOL_MARK=""
 
 # configure key keybindings
 bindkey -e                                      # emacs key bindings
+# bindkey -v                                      # vim key bindings
 bindkey ' ' magic-space                         # do history expansion on space
 bindkey '^[[3;5~' kill-word                     # ctrl + Supr
 bindkey '^H' backward-kill-word                 # ctrl + del
@@ -49,15 +50,15 @@ bindkey '^[[H' beginning-of-line                # home
 bindkey '^[[F' end-of-line                      # end
 bindkey '^[[Z' undo                             # shift + tab undo last action
 
-autoload edit-command-line
+autoload -z edit-command-line
 zle -N edit-command-line
-bindkey -M vicmd v edit-command-line            # edit command line in vim with <ESC> v
+bindkey "^X^E" edit-command-line            # edit command line in vim with C-x C-e
 
 # enable completion features
 autoload -Uz compinit
 compinit -d ~/.cache/zcompdump
 
-source ~/.local/share/fzf-tab/fzf-tab.plugin.zsh
+[ -f ~/.local/share/fzf-tab/fzf-tab.plugin.zsh ] && source ~/.local/share/fzf-tab/fzf-tab.plugin.zsh
 
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' # case insensitive tab completion
@@ -312,7 +313,9 @@ new() {
 
 
 # Load Angular CLI autocompletion.
-source <(ng completion script)
+if type ng &> /dev/null; then
+    source <(ng completion script)
+fi
 
 # Open files in their default applications
 alias open=xdg-open
@@ -376,6 +379,7 @@ if type fd &> /dev/null && type fzf &> /dev/null; then
     alias f=smartcd
 fi
 
+export PATH="$PATH:/home/dave/.local/share/gem/ruby/3.4.0/bin"
 if type tmuxinator &> /dev/null && type fzf &> /dev/null; then
     function mux() {
         project=$(tmuxinator completions start | fzf)
@@ -461,6 +465,14 @@ eval "$(zoxide init zsh)"
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
 
+# yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
 
 # fnm
 FNM_PATH="$HOME/.local/share/fnm"
@@ -469,9 +481,28 @@ if [ -d "$FNM_PATH" ]; then
   eval "`fnm env`"
 fi
 
+# java
+alias intellij="~/.local/share/JetBrains/Toolbox/apps/intellij-idea/bin/idea"
+
+# asdf setup
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
+export PATH="/home/dave/.bun/bin:$PATH"
+
 # TODO - Consider removing this (and dart dependency)
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
 [[ -f /home/dave/.dart-cli-completion/zsh-config.zsh ]] && . /home/dave/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
+if [ -z $WAYLAND_DISPLAY ] && [ $XDG_VTNR -eq 3 ]; then
+    niri-session
+fi
+
+# pnpm
+export PNPM_HOME="/home/dave/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
