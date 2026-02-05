@@ -562,6 +562,7 @@ require('lazy').setup({
         ansiblels = {
           filetypes = { 'yaml', 'yml', 'ansible' },
         },
+        astro = {},
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -839,24 +840,25 @@ require('lazy').setup({
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = {
-        'gdscript',
-        'godot_resource',
-        'gdshader',
+        'astro',
         'bash',
         'c',
+        'gdscript',
+        'gdshader',
+        'go',
+        'godot_resource',
         'html',
+        'javascript',
         'lua',
         'luadoc',
         'markdown',
+        'python',
+        'query',
+        'rust',
+        'sql',
+        'typescript',
         'vim',
         'vimdoc',
-        'python',
-        'go',
-        'rust',
-        'javascript',
-        'typescript',
-        'query',
-        'sql',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
