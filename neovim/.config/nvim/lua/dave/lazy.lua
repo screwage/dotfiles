@@ -277,7 +277,18 @@ require('lazy').setup({
       local builtin = require 'telescope.builtin'
       local utils = require 'telescope.utils'
       vim.keymap.set('n', '<C-p>', function()
+        local buffer_dir = utils.buffer_dir()
+
+        local git_root = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(buffer_dir) .. ' rev-parse --show-toplevel')[1]
+
+        if vim.v.shell_error ~= 0 then
+          -- Not in a git repo, fall back to regular find_files
+          builtin.find_files { cwd = buffer_dir }
+          return
+        end
+
         builtin.git_files {
+          cwd = git_root,
           use_file_path = true,
           show_untracked = true,
         }
