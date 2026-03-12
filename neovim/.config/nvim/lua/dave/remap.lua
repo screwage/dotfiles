@@ -45,9 +45,9 @@ vim.keymap.set('n', '<CR>', '<cmd>nohlsearch<CR>', { silent = true })
 -- vim.keymap.set("v", "<leader>y", "\"+y")
 -- vim.keymap.set("n", "<leader>Y", "\"+Y")
 
-vim.keymap.set('n', '<leader>f', function()
-  vim.lsp.buf.format()
-end)
+-- vim.keymap.set('n', '<leader>f', function()
+--   vim.lsp.buf.format()
+-- end)
 
 vim.keymap.set('v', '<leader>f', function()
   vim.lsp.buf.format {
