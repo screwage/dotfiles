@@ -25,8 +25,6 @@ stow-ghostty:
 stow-gowall:
 	stow --verbose --target=$$HOME --restow gowall
 
-stow-swaylock:
-	stow --verbose --target=$$HOME --restow swaylock
 
 stow-waybar:
 	stow --verbose --target=$$HOME --restow waybar
@@ -40,8 +38,6 @@ delete-halloy:
 delete-waybar:
 	stow --verbose --target=$$HOME --delete waybar
 
-delete-swaylock:
-	stow --verbose --target=$$HOME --delete swaylock
 
 delete-gowall:
 	stow --verbose --target=$$HOME --delete gowall
