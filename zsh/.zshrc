@@ -494,8 +494,10 @@ export PATH="/home/dave/.bun/bin:$PATH"
 [[ -f /home/dave/.dart-cli-completion/zsh-config.zsh ]] && . /home/dave/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
-if [ -z $WAYLAND_DISPLAY ] && [ $XDG_VTNR -eq 3 ]; then
-    niri-session
+if type niri-session &> /dev/null ; then
+    if [ -z $WAYLAND_DISPLAY ] && [ $XDG_VTNR -eq 3 ]; then
+        niri-session
+    fi
 fi
 
 # pnpm
