@@ -480,6 +480,24 @@ if [ -d "$FNM_PATH" ]; then
   eval "`fnm env`"
 fi
 
+# nvm
+export NVM_DIR="$HOME/.nvm"
+
+if [ -d "$NVM_DIR" ]; then
+    # Lazy load nvm
+    function _load_nvm() {
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    }
+
+    # Intercept the commands that need nvm, load it, then run the real command
+    function nvm node npm npx yarn pnpm {
+      unfunction nvm node npm npx yarn pnpm
+      _load_nvm
+      "$0" "$@"
+    }
+fi
+
 # java
 alias intellij="~/.local/share/JetBrains/Toolbox/apps/intellij-idea/bin/idea"
 
@@ -511,4 +529,3 @@ esac
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/home/dave/.lmstudio/bin"
 # End of LM Studio CLI section
-
