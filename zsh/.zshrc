@@ -264,11 +264,6 @@ export LESS_TERMCAP_ue=$'\E[0m'      # reset underline
 # Take advantage of $LS_COLORS for completion as well
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
-# ls aliases
-if [ "$OSTYPE" != linux-gnu ]; then  # Is this the macOS system?
-    alias ls=gls
-fi
-
 setup_ls_aliases(){
   local ls_cmd=ls
   
