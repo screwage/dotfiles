@@ -317,6 +317,10 @@ if type ng &> /dev/null; then
     source <(ng completion script)
 fi
 
+if type lighthouse &> /dev/null; then
+    alias light="lighthouse --chrome-flags='--headless' --view"
+fi
+
 # Open files in their default applications
 alias open=xdg-open
 
@@ -506,3 +510,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/dave/.lmstudio/bin"
+# End of LM Studio CLI section
+
