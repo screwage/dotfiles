@@ -337,6 +337,104 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      vim.keymap.set('n', '<leader>gw', function()
+        local buf_dir = utils.buffer_dir()
+        local git_root = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(buf_dir) .. ' rev-parse --show-toplevel')[1]
+
+        if vim.v.shell_error ~= 0 then
+          vim.notify('Not in a git repo', vim.log.levels.WARN)
+          return
+        end
+
+        -- Parse `git worktree list --porcelain` output
+        local lines = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(git_root) .. ' worktree list --porcelain')
+        local worktrees = {}
+        local current = {}
+        for _, line in ipairs(lines) do
+          if line == '' then
+            if current.path then
+              table.insert(worktrees, current)
+            end
+            current = {}
+          elseif vim.startswith(line, 'worktree ') then
+            current.path = line:sub(10)
+          elseif vim.startswith(line, 'branch ') then
+            current.branch = line:sub(8):gsub('^refs/heads/', '')
+          elseif vim.startswith(line, 'HEAD ') then
+            current.head = line:sub(6, 12)
+          elseif line == 'detached' then
+            current.branch = '(detached)'
+          end
+        end
+        if current.path then
+          table.insert(worktrees, current)
+        end
+
+        local pickers = require 'telescope.pickers'
+        local finders = require 'telescope.finders'
+        local conf = require('telescope.config').values
+        local actions = require 'telescope.actions'
+        local action_state = require 'telescope.actions.state'
+
+        pickers
+          .new({}, {
+            prompt_title = 'Git Worktrees',
+            finder = finders.new_table {
+              results = worktrees,
+              entry_maker = function(entry)
+                local icon = entry.path == git_root and '* ' or '  '
+                return {
+                  value = entry,
+                  display = icon .. (entry.branch or '(detached)') .. '  ' .. entry.path,
+                  ordinal = (entry.branch or '') .. ' ' .. entry.path,
+                }
+              end,
+            },
+            sorter = conf.generic_sorter {},
+            attach_mappings = function(prompt_bufnr, map)
+              actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                local sel = action_state.get_selected_entry()
+                local worktree_path = sel.value.path
+
+                -- Get the current file's path relative to its git root, then try to find
+                -- the same relative path in the target worktree
+                local current_file = vim.fn.expand '%:p'
+                local target_file = nil
+
+                if current_file ~= '' then
+                  local rel = current_file:gsub('^' .. vim.pesc(git_root) .. '/', '')
+                  local candidate = worktree_path .. '/' .. rel
+                  if vim.fn.filereadable(candidate) == 1 then
+                    target_file = candidate
+                  end
+                end
+
+                if target_file then
+                  vim.cmd('edit ' .. vim.fn.fnameescape(target_file))
+                else
+                  vim.cmd('cd ' .. worktree_path)
+                  builtin.git_files {
+                    cwd = worktree_path,
+                    use_file_path = true,
+                    show_untracked = true,
+                  }
+                end
+              end)
+
+              -- <C-f>: just browse files without changing cwd
+              map({ 'i', 'n' }, '<C-f>', function()
+                actions.close(prompt_bufnr)
+                local sel = action_state.get_selected_entry()
+                builtin.find_files { cwd = sel.value.path }
+              end)
+
+              return true
+            end,
+          })
+          :find()
+      end, { desc = '[G]it [W]orktrees' })
     end,
   },
 
