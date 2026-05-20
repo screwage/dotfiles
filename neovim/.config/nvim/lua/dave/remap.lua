@@ -50,14 +50,15 @@ vim.keymap.set('n', '<CR>', '<cmd>nohlsearch<CR>', { silent = true })
 -- end)
 
 vim.keymap.set('v', '<leader>f', function()
-  vim.lsp.buf.format {
+  require('conform').format {
     async = true,
+    lsp_fallback = true,
     range = {
-      ['start'] = vim.api.nvim_buf_get_mark(0, '<'),
+      start = vim.api.nvim_buf_get_mark(0, '<'),
       ['end'] = vim.api.nvim_buf_get_mark(0, '>'),
     },
   }
-end)
+end, { desc = 'Format selection with conform' })
 
 -- quickfix menu controls
 vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
