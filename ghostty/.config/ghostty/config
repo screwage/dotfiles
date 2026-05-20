@@ -76,3 +76,6 @@ copy-on-select = clipboard
 app-notifications = no-clipboard-copy
 
 shell-integration-features = ssh-terminfo,ssh-env
+
+# send new line on shift+enter
+keybind = shift+enter=text:\x1b[13;2u
