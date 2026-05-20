@@ -297,7 +297,12 @@ fi
 
 # Create a directory and cd into it
 new() {
-	mkdir "$1" && cd "$1"
+	mkdir -p "$1" && cd "$1"
+}
+
+# Create a temp directory and cd into it
+cdtemp() {
+    cd "$(mktemp -d)"
 }
 
 # Put all your aliases and configs in files under the ~/.zshrc.d folder
@@ -317,7 +322,10 @@ if type lighthouse &> /dev/null; then
 fi
 
 # Open files in their default applications
-alias open=xdg-open
+# Disown the application from the current terminal
+open() {
+    xdg-open "$@" >/dev/null 2>&1 & disown
+}
 
 # Quickly start up a local http server bc im lazy
 # Binding the interface directly speeds up http.server startup time (no dns lookups)
@@ -513,7 +521,7 @@ export PATH="/home/dave/.bun/bin:$PATH"
 ## [/Completion]
 
 if type niri-session &> /dev/null ; then
-    if [ -z $WAYLAND_DISPLAY ] && [ $XDG_VTNR -eq 3 ]; then
+    if [ -z "$WAYLAND_DISPLAY" ] && [ "${XDG_VTNR:-0}" -eq 3 ]; then
         niri-session
     fi
 fi
@@ -526,6 +534,4 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/dave/.lmstudio/bin"
-# End of LM Studio CLI section
+for f in ~/.config/zsh/*.zsh; do source "$f"; done
