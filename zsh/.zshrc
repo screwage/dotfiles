@@ -397,29 +397,6 @@ if type tmuxinator &> /dev/null && type fzf &> /dev/null; then
     }
 fi
 
-# TODO - update from work zshrc or get rid of it
-function jqfzf() {
-    local input key
-
-    if [ -p /dev/stdin ]; then
-	    # If input is piped in...
-	    input=$(cat -)
-    else
-	    # If file is provided as an argument...
-	    input=$(cat "$1")
-    fi
-
-    if [ $# -eq 0 ] || ([ -p /dev/stdin ] && [ $# -eq 0 ]) || ([ ! -p /dev/stdin ] && [ $# -eq 1 ]); then
-	    key=$(echo "$input" | jq -r '[.[] | keys[]] | unique | .[]' | fzf --header="Select a JSON Key to search by...")
-    else
-	    key="${@: -1}"
-    fi
-
-    echo "$input" | jq -r ".[] | select(has(\"${key}\")) | .${key} | tostring" | fzf --preview="echo '$input' | jq -r '.[] | select(has(\"${key}\") and (.${key} | tostring | contains(\"{}\")))'"
-}
-
-alias dumprepo='fd --type f --hidden --exclude .git --exclude package-lock.json --exclude node_modules --exclude go.sum --exec sh -c '\''echo "*=*=*= {} =*=*=*"; cat "{}"'\'''
-
 # TODO - Migrate to mac zshrc
 if type aerospace &> /dev/null && type fzf &> /dev/null; then
 	function af() {
