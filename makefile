@@ -25,19 +25,23 @@ stow-ghostty:
 stow-gowall:
 	stow --verbose --target=$$HOME --restow gowall
 
-
 stow-waybar:
 	stow --verbose --target=$$HOME --restow waybar
 
 stow-halloy:
 	stow --verbose --target=$$HOME --restow halloy
 
+stow-misc:
+	stow --verbose --target=$$HOME --restow misc
+
+delete-misc:
+	stow --verbose --target=$$HOME --delete misc
+
 delete-halloy:
 	stow --verbose --target=$$HOME --delete halloy
 
 delete-waybar:
 	stow --verbose --target=$$HOME --delete waybar
-
 
 delete-gowall:
 	stow --verbose --target=$$HOME --delete gowall
