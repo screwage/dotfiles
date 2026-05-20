@@ -1,0 +1,207 @@
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["requests", "markdownify"]
+# ///
+
+import sys
+import os
+import requests
+import json
+import markdownify
+
+LEETCODE_API_URL = "https://leetcode.com/graphql"
+
+
+def do_graphql_request(body, variables=None):
+    response = requests.post(
+        url=LEETCODE_API_URL,
+        json={"query": body, "variables": variables if variables is not None else ""},
+    )
+
+    if not response.ok:
+        print(body, file=sys.stderr)
+        print("", file=sys.stderr)
+        print(variables, file=sys.stderr)
+        print(response.content, file=sys.stderr)
+    return response.content
+
+
+def get_question_content(title_slug):
+    body = """query questionContent($titleSlug: String!) {
+            question(titleSlug: $titleSlug) {
+                content
+                mysqlSchemas
+                dataSchemas
+                }
+            }"""
+
+    variables = f"""{{
+        "titleSlug": "{title_slug}"
+        }}"""
+
+    resp = do_graphql_request(body, variables)
+    j = json.loads(resp)
+
+    html = j["data"]["question"]["content"]
+    md = markdownify.markdownify(html, strip=["strong"]).replace("\n\n", "\n")
+
+    return md
+
+
+def get_problem(title_slug):
+    body = """query questionEditorData($titleSlug: String!) {
+            question(titleSlug: $titleSlug) {
+                questionId
+                questionFrontendId
+                codeSnippets {
+                    lang
+                    langSlug
+                    code
+                    }
+                envInfo
+                enableRunCode
+                hasFrontendPreview
+                frontendPreviews
+                }
+            }"""
+
+    variables = f"""{{
+    "titleSlug": "{title_slug}"
+    }}"""
+
+    resp = do_graphql_request(body, variables)
+
+    return resp
+
+
+def search_problems(id):
+    body = """query problemsetQuestionList($categorySlug: String, $limit: Int, $skip: Int, $filters: QuestionListFilterInput) {
+            problemsetQuestionList: questionList(
+                categorySlug: $categorySlug
+                limit: $limit
+                skip: $skip
+                filters: $filters
+                ) {
+                    total: totalNum
+                    questions: data {
+                        acRate
+                        difficulty
+                        freqBar
+                        frontendQuestionId: questionFrontendId
+                        isFavor
+                        paidOnly: isPaidOnly
+                        status
+                        title
+                        titleSlug
+                        topicTags {
+                            name
+                            id
+                            slug
+                            }
+                        hasSolution
+                        hasVideoSolution
+                        }
+                    }
+                }"""
+
+    variables = f"""{{
+    "categorySlug": "",
+    "skip": 0,
+    "limit": 10,
+    "filters": {{
+        "searchKeywords": "{str(id)}"
+        }}
+    }}"""
+
+    resp = json.loads(do_graphql_request(body, variables))
+
+    questions = resp["data"]["problemsetQuestionList"]["questions"]
+    question = [q for q in questions if int(q["frontendQuestionId"]) == id][0]
+
+    return question
+
+
+def get_title_slug(question):
+    return question["titleSlug"]
+
+
+def find_code_snippet(snippets, lang):
+    for snip in snippets:
+        if snip["lang"] == lang:
+            return snip["code"]
+
+    print(f"{lang} was not found!", file=sys.stderr)
+
+
+def write_files(title, slug, python_starter, go_starter):
+    problem_url = f"https://leetcode.com/problems/{slug}"
+
+    md_problem_content = get_question_content(slug)
+    md = f"# {title}\n{md_problem_content}\nView on [LeetCode]({problem_url})"
+
+    print(f"Creating files for {slug}...", file=sys.stderr)
+
+    with open("README.md", "w") as problem_file:
+        problem_file.write(md)
+        print("Created README.md with description", file=sys.stderr)
+
+    with open("solution.py", "w") as solution_file:
+        solution_file.write(python_starter)
+        print("Created solution.py with starter code", file=sys.stderr)
+
+    with open("solution.go", "w") as go_file:
+        go_file.write(go_starter)
+        print("Created solution.go with starter code", file=sys.stderr)
+
+
+def create_problem_directory(id, slug):
+    id_str = str(id).zfill(4)
+
+    dir_name = f"{id_str}-{slug}"
+
+    if os.getcwd().endswith(dir_name):
+        print("Current directory matches problem, skipping creation", file=sys.stderr)
+        return ""
+
+    os.mkdir(dir_name)
+    os.chdir(dir_name)
+
+    return os.getcwd()
+
+
+def main():
+    arg_count = len(sys.argv)
+    if arg_count < 2 or not sys.argv[1].isnumeric():
+        print(
+            "Launch this script with a valid leetcode question number!", file=sys.stderr
+        )
+        exit(0)
+
+    id = int(sys.argv[1])
+
+    problem_question = search_problems(id)
+    slug = get_title_slug(problem_question)
+
+    problem = get_problem(slug)
+    problem_json = json.loads(problem)
+
+    lang_data = problem_json["data"]["question"]["codeSnippets"]
+
+    title = problem_question["title"]
+    print(f"Found question {id}: {title}", file=sys.stderr)
+
+    python_starter = find_code_snippet(lang_data, "Python3")
+    go_starter = find_code_snippet(lang_data, "Go")
+
+    out_dir = create_problem_directory(id, slug)
+    write_files(title, slug, python_starter, go_starter)
+
+    # Print created directory name to stdout for scripting
+    if out_dir:
+        print(out_dir)
+
+
+if __name__ == "__main__":
+    main()

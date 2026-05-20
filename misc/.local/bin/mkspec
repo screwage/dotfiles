@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Create Spectrograms directory
+mkdir -p Spectrograms
+
+# Process each input file
+for file in "$@"; do
+    # Get just the filename without path
+    filename=$(basename "$file")
+
+    # Generate full spectrogram
+    sox "$file" -n remix 1 spectrogram -x 3000 -y 513 -z 120 -w Kaiser -o "Spectrograms/${filename}-full.png"
+
+    # Generate zoom spectrogram
+    sox "$file" -n remix 1 spectrogram -X 500 -y 1025 -z 120 -w Kaiser -S 1:00 -d 0:02 -o "Spectrograms/${filename}-zoom.png"
+
+    echo "Created spectrograms for ${filename}..."
+done
+
+echo "Spectrograms complete!"

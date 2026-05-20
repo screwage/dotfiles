@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec /usr/bin/opencode attach http://$(tailscale ip -4):4096 --dir "$PWD" "$@"
