@@ -52,6 +52,17 @@
 
 /* Simple Hover effects for individual left modules */
 #custom-uptime:hover,
+
+#cpu.critical {
+    background-color: @ctp-red;
+    color: @ctp-base;
+}
+
+#memory.critical {
+    background-color: @ctp-red;
+    color: @ctp-base;
+}
+
 #cpu:hover {
     background-color: @ctp-surface0;
 }
@@ -122,6 +133,10 @@
     outline-offset: -1px;
 }
 
+#tray * {
+    margin-right: 12px;
+}
+
 /* --- Highlighted state for Pomodoro module when running (work or break) --- */
 #custom-pomodoro.work,
 #custom-pomodoro.break {
@@ -175,7 +190,7 @@
 
 #cpu,
 #memory {
-    color: @ctp-text;
+    color: @ctp-lavender;
 }
 
 #clock {
