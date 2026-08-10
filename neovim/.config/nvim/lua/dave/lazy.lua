@@ -780,7 +780,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         go = { 'gofumpt' },
-        gdscript = {},
+        gdscript = { 'gdscript-formatter' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
         svelte = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },

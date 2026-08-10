@@ -15,20 +15,21 @@
 
 /* --- Global Styles --- */
 * {
-    font-family: 'SF Pro Text', 'Inter', 'Segoe UI, NotoSans Nerd Font', sans-serif;
-    font-size: 13px;
-    min-height: 0;
-    padding-right: 0px;
-    padding-left: 0px;
-    padding-bottom: 0px;
+  font-family:
+    "SF Pro Text", "Inter", "Segoe UI, NotoSans Nerd Font", sans-serif;
+  font-size: 13px;
+  min-height: 0;
+  padding-right: 0px;
+  padding-left: 0px;
+  padding-bottom: 0px;
 }
 
 /* --- Waybar Container --- */
 #waybar {
-    background: alpha(@ctp-base, 0.9);
-    color: @ctp-text;
-    font-weight: 500;
-    margin-bottom: 4px;
+  background: alpha(@ctp-base, 0.9);
+  color: @ctp-text;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
 /* --- Left Modules (Individual, Fully Rounded Blocks - With Horizontal Spacing & Simple Hover) --- */
@@ -36,113 +37,119 @@
 #custom-uptime,
 #cpu,
 #memory {
-    background-color: @ctp-base;
-    padding: 0.3rem 0.7rem;
-    margin: 5px 0px;
-    border-radius: 6px;
-    min-width: 0;
-    border: none;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  background-color: @ctp-base;
+  padding: 0.3rem 0.7rem;
+  margin: 5px 0px;
+  border-radius: 6px;
+  min-width: 0;
+  border: none;
+  transition:
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
 }
 
-
 #custom-uptime {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 /* Simple Hover effects for individual left modules */
 #custom-uptime:hover,
-
 #cpu.critical {
-    background-color: @ctp-red;
-    color: @ctp-base;
+  background-color: @ctp-red;
+  color: @ctp-base;
 }
 
 #memory.critical {
-    background-color: @ctp-red;
-    color: @ctp-base;
+  background-color: @ctp-red;
+  color: @ctp-base;
 }
 
 #cpu:hover {
-    background-color: @ctp-surface0;
+  background-color: @ctp-surface0;
 }
 
 #workspaces {
-    padding: 2px;
-    margin-left: 7px;
-    margin-right: 5px;
-    border-radius: 6px;
-    background-color: @ctp-base;
+  padding: 2px;
+  margin-left: 7px;
+  margin-right: 5px;
+  border-radius: 6px;
+  background-color: @ctp-base;
 }
 
 #workspaces button {
-    color: @ctp-lavender;
-    /* border-radius: 4px; */
-    /* small inner radius so active pill looks inset */
-    padding: 0.3rem 0.4rem;
-    margin: 0;
-    /* no gaps between buttons */
-    background: transparent;
-    transition: all 0.2s ease-in-out;
-    border: none;
-    outline: none;
-    min-width: 0;
+  color: @ctp-overlay0;
+  /* border-radius: 4px; */
+  /* small inner radius so active pill looks inset */
+  padding: 0.3rem 0.4rem;
+  margin: 0;
+  /* no gaps between buttons */
+  background: transparent;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  outline: none;
+  min-width: 0;
 }
 
 #workspaces button.active {
-    color: @ctp-mauve;
+  color: @ctp-mauve;
 }
 
 #workspaces button:hover {
-    background: @ctp-mauve;
-    color: @ctp-base;
+  background: @ctp-mauve;
+  color: @ctp-base;
 }
 
 /* --- Center Module (Individual, Fully Rounded Block - With Simple Hover) --- */
 #clock {
-    padding: 0.3rem 0.7rem;
-    margin: 5px 0px;
-    border-radius: 6px;
-    min-width: 0;
-    border: none;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  padding: 0.3rem 0.7rem;
+  margin: 5px 0px;
+  border-radius: 6px;
+  min-width: 0;
+  border: none;
+  transition:
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
 }
 
 #custom-pomodoro {
-    background-color: @ctp-base;
-    padding: 0.3rem 0.7rem;
-    margin: 5px 0px;
-    border-radius: 6px;
-    min-width: 0;
-    border: none;
-    outline: none;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, outline 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    color: @ctp-lavender;
-    font-weight: 600;
+  background-color: @ctp-base;
+  padding: 0.3rem 0.7rem;
+  margin: 5px 0px;
+  border-radius: 6px;
+  min-width: 0;
+  border: none;
+  outline: none;
+  transition:
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    outline 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  color: @ctp-lavender;
+  font-weight: 600;
 }
 
 #custom-pomodoro {
-    margin-left: 5px;
-    margin-right: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 #custom-pomodoro:hover {
-    background-color: @ctp-surface0;
-    color: @ctp-text;
-    outline: 1px solid alpha(@ctp-text, 0.1);
-    outline-offset: -1px;
+  background-color: @ctp-surface0;
+  color: @ctp-text;
+  outline: 1px solid alpha(@ctp-text, 0.1);
+  outline-offset: -1px;
 }
 
 #tray * {
-    margin-right: 12px;
+  margin-right: 12px;
 }
 
 /* --- Highlighted state for Pomodoro module when running (work or break) --- */
 #custom-pomodoro.work,
 #custom-pomodoro.break {
-    color: @ctp-mauve;
-    background-color: alpha(@ctp-mauve, 0.1);
-    outline: none;
+  color: @ctp-mauve;
+  background-color: alpha(@ctp-mauve, 0.1);
+  outline: none;
 }
 
 /* --- Right Modules (Single, Seamless Bar) --- */
@@ -152,13 +159,15 @@
 #network,
 #custom-lock,
 #battery {
-    background-color: @ctp-base;
-    padding: 0.3rem 0.7rem;
-    margin: 5px 0px;
-    border-radius: 0;
-    min-width: 0;
-    border: none;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  background-color: @ctp-base;
+  padding: 0.3rem 0.7rem;
+  margin: 5px 0px;
+  border-radius: 0;
+  min-width: 0;
+  border: none;
+  transition:
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
 }
 
 #bluetooth:hover,
@@ -167,93 +176,93 @@
 #network:hover,
 #custom-lock:hover,
 #battery:hover {
-    background-color: @ctp-surface0;
+  background-color: @ctp-surface0;
 }
 
 #bluetooth {
-    margin-left: 0px;
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
+  margin-left: 0px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
 }
 
 #battery {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    margin-right: 7px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  margin-right: 7px;
 }
 
 /* --- Module Colors --- */
 
 #custom-uptime {
-    color: @ctp-lavender;
+  color: @ctp-lavender;
 }
 
 #cpu,
 #memory {
-    color: @ctp-lavender;
+  color: @ctp-lavender;
 }
 
 #clock {
-    color: @ctp-mauve;
-    font-weight: 500;
+  color: @ctp-mauve;
+  font-weight: 500;
 }
 
 #pulseaudio {
-    color: @ctp-text;
+  color: @ctp-text;
 }
 
 #backlight {
-    color: @ctp-text;
+  color: @ctp-text;
 }
 
 #network {
-    color: @ctp-text;
+  color: @ctp-text;
 }
 
 #network.disconnected {
-    color: @ctp-red;
+  color: @ctp-red;
 }
 
 #custom-lock {
-    color: @ctp-lavender;
+  color: @ctp-lavender;
 }
 
 #bluetooth {
-    color: @ctp-overlay0;
-    font-size: 16px;
+  color: @ctp-overlay0;
+  font-size: 16px;
 }
 
 #bluetooth.on {
-    color: @ctp-blue;
+  color: @ctp-blue;
 }
 
 #bluetooth.connected {
-    color: @ctp-mauve;
+  color: @ctp-mauve;
 }
 
 #battery {
-    color: @ctp-mauve;
+  color: @ctp-mauve;
 }
 
 #battery.charging {
-    color: @ctp-green;
+  color: @ctp-green;
 }
 
 #battery.warning:not(.charging) {
-    color: @ctp-red;
+  color: @ctp-red;
 }
 
 /* --- Tooltip Styles --- */
 tooltip {
-    background-color: @ctp-mantle;
-    color: @ctp-text;
+  background-color: @ctp-mantle;
+  color: @ctp-text;
 }
 
 tooltip * {
-    padding: 4px;
-    /* padding: 5px 12px; */
-    /* margin: 5px 0px; */
-    /* border-radius: 6px; */
-    /* border: 1px solid alpha(@ctp-text, 0.1); */
-    font-size: 12px;
+  padding: 4px;
+  /* padding: 5px 12px; */
+  /* margin: 5px 0px; */
+  /* border-radius: 6px; */
+  /* border: 1px solid alpha(@ctp-text, 0.1); */
+  font-size: 12px;
 }

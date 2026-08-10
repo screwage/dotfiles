@@ -16,6 +16,9 @@ stow-zsh:
 stow-sway:
 	stow --verbose --target=$$HOME --restow sway
 
+stow-niri:
+	stow --verbose --target=$$HOME --restow niri
+
 stow-fuzzel:
 	stow --verbose --target=$$HOME --restow fuzzel
 
@@ -54,6 +57,9 @@ delete-fuzzel:
 
 delete-sway:
 	stow --verbose --target=$$HOME --delete sway
+
+delete-niri:
+	stow --verbose --target=$$HOME --delete niri
 
 delete-nvim:
 	stow --verbose --target=$$HOME --delete neovim
