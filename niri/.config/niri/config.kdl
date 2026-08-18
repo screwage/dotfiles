@@ -78,7 +78,7 @@ binds {
     // ─── Applications ───
     // MOD+T                          hotkey-overlay-title="Open Terminal: alacritty" { spawn-sh "alacritty"; }
     MOD+T                          hotkey-overlay-title="Open Terminal: ghostty" { spawn-sh "ghostty +new-window"; }
-    SUPER+SPACE                           hotkey-overlay-title="Open App Launcher: wofi" { spawn-sh "wofi"; }
+    SUPER+SPACE                           hotkey-overlay-title="Open App Launcher: wofi" { spawn-sh "wofi --show drun"; }
     // SUPER+SPACE                           hotkey-overlay-title="Open App Launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     MOD+B                               hotkey-overlay-title="Open Browser: firefox" { spawn-sh "firefox"; }
     SUPER+L                           hotkey-overlay-title="Lock Screen: swaylock" { spawn-sh "swaylock"; }
